@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Teller Environment</title>
+    <!-- Google Fonts for Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Modern Reset & Base Styles */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --surface-color: rgba(255, 255, 255, 0.95);
+            --bg-color: #f3f4f6;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            --radius-lg: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --surface-color: rgba(31, 41, 55, 0.95);
+                --text-main: #f9fafb;
+                --text-muted: #9ca3af;
+                --shadow-lg: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-color);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(102, 126, 234, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(118, 75, 162, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+            background: var(--surface-color);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary-gradient);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Main Content */
+        .content {
+            padding: 30px;
+        }
+
+        /* Configuration Section */
+        .config-section {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status-badge {
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #e5e7eb;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-badge.connected {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: white;
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-weight: 500;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .btn-secondary {
+                background: #374151;
+                border-color: #4b5563;
+                color: white;
+            }
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Input Section */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: rgba(0, 0, 0, 0.03);
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-main);
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            background: white;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            textarea {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            textarea:focus {
+                background: rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        /* Button */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Output Section */
+        .output-section {
+            margin-top: 40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 30px;
+            display: none;
+            /* Hidden by default */
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .story-content {
+            font-family: 'Merriweather', serif;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            white-space: pre-wrap;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .story-content::first-letter {
+            font-size: 3em;
+            float: left;
+            margin-right: 10px;
+            line-height: 1;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Story Teller</h1>
+            <p>현실감 넘치는 재미있는 이야기 제작소 (GPT-5 Nano)</p>
+        </div>
+
+        <div class="content">
+            <!-- Configuration -->
+            <div class="config-section">
+                <div id="statusBadge" class="status-badge">
+                    <span class="indicator"></span>
+                    <span id="statusText">API Key Missing</span>
+                </div>
+
+                <div class="file-input-wrapper">
+                    <button class="btn-secondary">📂 Load .env File</button>
+                    <input type="file" id="envFile" accept=".env,text/plain">
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="input-group">
+                <label for="topic">어떤 이야기를 듣고 싶으신가요?</label>
+                <textarea id="topic" placeholder="예: 비 오는 날 편의점에서 마주친 첫사랑, 지하철에서 잃어버린 에어팟 한 짝..."></textarea>
+            </div>
+
+            <button id="generateBtn" class="btn-primary">
+                <span class="loader" id="loader"></span>
+                <span id="btnText">이야기 만들기</span>
+            </button>
+
+            <!-- Output -->
+            <div class="output-section" id="outputSection">
+                <div class="story-content" id="storyContent">
+                    <!-- Story will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apiKey = '';
+
+        const envFileInput = document.getElementById('envFile');
+        const statusBadge = document.getElementById('statusBadge');
+        const statusText = document.getElementById('statusText');
+        const generateBtn = document.getElementById('generateBtn');
+        const topicInput = document.getElementById('topic');
+        const outputSection = document.getElementById('outputSection');
+        const storyContent = document.getElementById('storyContent');
+        const loader = document.getElementById('loader');
+        const btnText = document.getElementById('btnText');
+
+        // 1. Handle .env File Loading
+        envFileInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const contents = e.target.result;
+                const lines = contents.split('\n');
+                let found = false;
+
+                for (let line of lines) {
+                    line = line.trim();
+                    if (line.startsWith('OPENAI_API_KEY=')) {
+                        apiKey = line.split('=')[1].trim();
+                        // Remove quotes if present
+                        if ((apiKey.startsWith('"') && apiKey.endsWith('"')) ||
+                            (apiKey.startsWith("'") && apiKey.endsWith("'"))) {
+                            apiKey = apiKey.slice(1, -1);
+                        }
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found && apiKey) {
+                    updateStatus('Connected', true);
+                } else {
+                    updateStatus('Key Not Found in File', false);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function updateStatus(text, isSuccess) {
+            statusText.textContent = text;
+            statusBadge.className = 'status-badge ' + (isSuccess ? 'connected' : 'error');
+        }
+
+        // 2. Handle Generation
+        generateBtn.addEventListener('click', async () => {
+            const topic = topicInput.value.trim();
+
+            if (!apiKey) {
+                alert('먼저 .env 파일을 로드하여 API Key를 설정해주세요.');
+                return;
+            }
+
+            if (!topic) {
+                alert('주제를 입력해주세요.');
+                return;
+            }
+
+            // Set Loading State
+            setLoading(true);
+            outputSection.style.display = 'none';
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-5-nano", // As requested by user
+                        messages: [
+                            {
+                                role: "system",
+                                content: "당신은 최고의 수필가이자 이야기꾼입니다. 주어진 주제에 대해 아주 현실감 넘치고, 유머러스하며, 몰입도 높은 수필 형식의 이야기를 작성해주세요. 한국어로 작성하세요."
+                            },
+                            {
+                                role: "user",
+                                content: `주제: ${topic}`
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 2000
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'API Request Failed');
+                }
+
+                const data = await response.json();
+                const story = data.choices[0].message.content;
+
+                displayStory(story);
+
+            } catch (error) {
+                console.error(error);
+                alert('오류가 발생했습니다: ' + error.message + '\n\n만약 "model not found" 오류라면, API 키가 gpt-5-nano에 접근 권한이 없거나 모델명이 올바르지 않은 것일 수 있습니다.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        function setLoading(isLoading) {
+            generateBtn.disabled = isLoading;
+            if (isLoading) {
+                loader.style.display = 'inline-block';
+                btnText.textContent = '이야기 짓는 중...';
+            } else {
+                loader.style.display = 'none';
+                btnText.textContent = '이야기 만들기';
+            }
+        }
+
+        function displayStory(text) {
+            outputSection.style.display = 'block';
+            storyContent.innerHTML = text.replace(/\n/g, '<br>');
+
+            // Ensure smooth scroll to result
+            outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+    </script>
+
+</body>
+
+</html>
