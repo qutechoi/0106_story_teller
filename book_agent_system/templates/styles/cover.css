@@ -1,0 +1,38 @@
+/* 표지 전용 스타일 */
+.cover {
+  page: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: white;
+}
+
+.cover .cover-content {
+  padding: 40pt;
+}
+
+.cover .book-title {
+  font-size: 36pt;
+  font-weight: 700;
+  margin-bottom: 20pt;
+  color: #ffffff;
+  letter-spacing: 2pt;
+}
+
+.cover .book-subtitle {
+  font-size: 18pt;
+  font-weight: 300;
+  color: #e0e0e0;
+  margin-bottom: 50pt;
+}
+
+.cover .book-author {
+  font-size: 16pt;
+  font-weight: 400;
+  color: #cccccc;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  padding-top: 20pt;
+}

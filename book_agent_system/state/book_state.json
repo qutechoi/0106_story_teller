@@ -1,0 +1,38 @@
+{
+  "status": "complete",
+  "topic": "옵시디언(Obsidian), 노션(Notion), 조플린(Joplin) - 기초부터 활용방법까지 예시 중심 설명",
+  "audience": "디지털 노트 앱을 처음 접하거나 더 잘 활용하고 싶은 일반인",
+  "language": "ko",
+  "style_preference": "practical",
+  "title": {
+    "main_title": "내 머릿속 정리법",
+    "subtitle": "옵시디언·노션·조플린으로 시작하는 디지털 노트 실전 가이드"
+  },
+  "toc": "output/toc.json",
+  "chapters": {
+    "ch01": {"status": "complete", "path": "output/drafts/ch01.md", "word_count": 4150, "images": 4},
+    "ch02": {"status": "complete", "path": "output/drafts/ch02.md", "word_count": 4820, "images": 4},
+    "ch03": {"status": "complete", "path": "output/drafts/ch03.md", "word_count": 4280, "images": 6},
+    "ch04": {"status": "complete", "path": "output/drafts/ch04.md", "word_count": 3301, "images": 7},
+    "ch05": {"status": "complete", "path": "output/drafts/ch05.md", "word_count": 3842, "images": 10},
+    "ch06": {"status": "complete", "path": "output/drafts/ch06.md", "word_count": 3402, "images": 8},
+    "ch07": {"status": "complete", "path": "output/drafts/ch07.md", "word_count": 3847, "images": 8},
+    "ch08": {"status": "complete", "path": "output/drafts/ch08.md", "word_count": 3513, "images": 7},
+    "ch09": {"status": "complete", "path": "output/drafts/ch09.md", "word_count": 3686, "images": 8},
+    "ch10": {"status": "complete", "path": "output/drafts/ch10.md", "word_count": 2592, "images": 6},
+    "ch11": {"status": "complete", "path": "output/drafts/ch11.md", "word_count": 3675, "images": 6}
+  },
+  "images": {
+    "total": 74,
+    "generated": 72,
+    "placeholder": 2
+  },
+  "output": {
+    "html": "output/final/book_complete.html",
+    "pdf": "output/final/book_final.pdf",
+    "pdf_size_mb": 33.7
+  },
+  "current_phase": "complete",
+  "created_at": "2026-03-28T00:00:00Z",
+  "updated_at": "2026-03-28T00:00:00Z"
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "title_candidates_v1",
+  "topic_analysis": {
+    "core_keywords": [],
+    "scope": "",
+    "existing_books": []
+  },
+  "candidates": [],
+  "recommendation": {
+    "selected_rank": 0,
+    "reason": ""
+  }
+}

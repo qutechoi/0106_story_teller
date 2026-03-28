@@ -1,0 +1,31 @@
+{
+  "$schema": "book_state_v1",
+  "book_id": "",
+  "created_at": "",
+  "updated_at": "",
+  "metadata": {
+    "topic": "",
+    "audience": "",
+    "language": "ko",
+    "tone": "professional",
+    "total_chapters": 8,
+    "max_review_cycles": 3,
+    "target_words_per_chapter": 4000
+  },
+  "title": {
+    "status": "pending",
+    "candidates": [],
+    "selected": {
+      "main_title": "",
+      "subtitle": ""
+    }
+  },
+  "toc": {
+    "status": "pending",
+    "chapters": []
+  },
+  "chapters": [],
+  "overall_status": "initialized",
+  "current_phase": "Phase 0",
+  "progress_percent": 0
+}

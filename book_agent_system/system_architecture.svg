@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="1400" xmlns="http://www.w3.org/2000/svg" font-family="'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea"/>
+      <stop offset="100%" style="stop-color:#764ba2"/>
+    </linearGradient>
+    <linearGradient id="orchestratorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#16213e"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f093fb"/>
+      <stop offset="100%" style="stop-color:#f5576c"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4facfe"/>
+      <stop offset="100%" style="stop-color:#00f2fe"/>
+    </linearGradient>
+    <linearGradient id="imageGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#43e97b"/>
+      <stop offset="100%" style="stop-color:#38f9d7"/>
+    </linearGradient>
+    <linearGradient id="reviewGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fa709a"/>
+      <stop offset="100%" style="stop-color:#fee140"/>
+    </linearGradient>
+    <linearGradient id="revisionGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff9a9e"/>
+      <stop offset="100%" style="stop-color:#fad0c4"/>
+    </linearGradient>
+    <linearGradient id="finalGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a18cd1"/>
+      <stop offset="100%" style="stop-color:#fbc2eb"/>
+    </linearGradient>
+    <linearGradient id="userGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffecd2"/>
+      <stop offset="100%" style="stop-color:#fcb69f"/>
+    </linearGradient>
+    <linearGradient id="outputGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea"/>
+      <stop offset="100%" style="stop-color:#764ba2"/>
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#27ae60"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="1400" fill="#fafbfc" rx="12"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="900" height="90" fill="url(#headerGrad)" rx="12"/>
+  <rect x="0" y="40" width="900" height="50" fill="url(#headerGrad)"/>
+  <text x="450" y="42" text-anchor="middle" fill="white" font-size="26" font-weight="700">Multi-Agent Book Writing System</text>
+  <text x="450" y="72" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="15">6 Agents + 1 Orchestrator = Automated Book Publishing</text>
+
+  <!-- User Input -->
+  <rect x="300" y="115" width="300" height="60" rx="30" fill="url(#userGrad)" filter="url(#shadow)"/>
+  <text x="450" y="140" text-anchor="middle" fill="#333" font-size="14" font-weight="600">사용자 입력</text>
+  <text x="450" y="160" text-anchor="middle" fill="#666" font-size="12">주제 / 대상 독자 / 언어</text>
+
+  <!-- Arrow: User → Orchestrator -->
+  <line x1="450" y1="175" x2="450" y2="205" stroke="#555" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Orchestrator -->
+  <rect x="175" y="210" width="550" height="80" rx="12" fill="url(#orchestratorGrad)" filter="url(#shadow)"/>
+  <text x="450" y="245" text-anchor="middle" fill="white" font-size="18" font-weight="700">Orchestrator (CLAUDE.md)</text>
+  <text x="450" y="270" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12">상태 머신 관리 | 에이전트 순차 호출 | 실패 복구 | 진행 보고</text>
+
+  <!-- Arrow: Orchestrator → Phase 1 -->
+  <line x1="450" y1="290" x2="450" y2="325" stroke="#555" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="460" y="312" fill="#999" font-size="10">Phase 1</text>
+
+  <!-- Agent 1: Title -->
+  <rect x="250" y="330" width="400" height="70" rx="10" fill="white" stroke="url(#titleGrad)" stroke-width="2.5" filter="url(#shadow)"/>
+  <circle cx="290" cy="365" r="20" fill="url(#titleGrad)"/>
+  <text x="290" y="370" text-anchor="middle" fill="white" font-size="16" font-weight="700">1</text>
+  <text x="470" y="358" text-anchor="middle" fill="#333" font-size="15" font-weight="600">Title Agent - 제목 기획</text>
+  <text x="470" y="380" text-anchor="middle" fill="#888" font-size="11">주제 분석 → 웹 리서치 → 5개 후보 생성 → 사용자 선택</text>
+
+  <!-- Arrow: Title → Text -->
+  <line x1="450" y1="400" x2="450" y2="435" stroke="#555" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="460" y="422" fill="#999" font-size="10">Phase 2</text>
+
+  <!-- Agent 2: Text -->
+  <rect x="250" y="440" width="400" height="70" rx="10" fill="white" stroke="url(#textGrad)" stroke-width="2.5" filter="url(#shadow)"/>
+  <circle cx="290" cy="475" r="20" fill="url(#textGrad)"/>
+  <text x="290" y="480" text-anchor="middle" fill="white" font-size="16" font-weight="700">2</text>
+  <text x="470" y="468" text-anchor="middle" fill="#333" font-size="15" font-weight="600">Text Agent - 본문 작성</text>
+  <text x="470" y="490" text-anchor="middle" fill="#888" font-size="11">목차(TOC) 설계 → 챕터별 순차 집필 (3000~5000 words/ch)</text>
+
+  <!-- Arrow: Text → Image -->
+  <line x1="450" y1="510" x2="450" y2="545" stroke="#555" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="460" y="532" fill="#999" font-size="10">Phase 3</text>
+
+  <!-- Agent 3: Image -->
+  <rect x="250" y="550" width="400" height="70" rx="10" fill="white" stroke="url(#imageGrad)" stroke-width="2.5" filter="url(#shadow)"/>
+  <circle cx="290" cy="585" r="20" fill="url(#imageGrad)"/>
+  <text x="290" y="590" text-anchor="middle" fill="white" font-size="16" font-weight="700">3</text>
+  <text x="470" y="578" text-anchor="middle" fill="#333" font-size="15" font-weight="600">Image Agent - 이미지 생성</text>
+  <text x="470" y="600" text-anchor="middle" fill="#888" font-size="11">마커 파싱 → Mermaid/API로 생성 → 본문에 삽입</text>
+
+  <!-- Arrow: Image → Review -->
+  <line x1="450" y1="620" x2="450" y2="655" stroke="#555" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="460" y="642" fill="#999" font-size="10">Phase 4</text>
+
+  <!-- Agent 4: Review -->
+  <rect x="250" y="660" width="400" height="70" rx="10" fill="white" stroke="url(#reviewGrad)" stroke-width="2.5" filter="url(#shadow)"/>
+  <circle cx="290" cy="695" r="20" fill="url(#reviewGrad)"/>
+  <text x="290" y="700" text-anchor="middle" fill="white" font-size="16" font-weight="700">4</text>
+  <text x="470" y="688" text-anchor="middle" fill="#333" font-size="15" font-weight="600">Review Agent - 품질 검수</text>
+  <text x="470" y="710" text-anchor="middle" fill="#888" font-size="11">7대 영역 검증 (70점 만점) | PASS: 49점+ | FAIL: 수정 요청</text>
+
+  <!-- Decision Diamond -->
+  <polygon points="450,760 520,800 450,840 380,800" fill="white" stroke="#e67e22" stroke-width="2.5" filter="url(#shadow)"/>
+  <text x="450" y="803" text-anchor="middle" fill="#e67e22" font-size="13" font-weight="600">판정</text>
+
+  <!-- Arrow: Review → Diamond -->
+  <line x1="450" y1="730" x2="450" y2="762" stroke="#555" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- PASS Arrow (right → down) -->
+  <line x1="520" y1="800" x2="620" y2="800" stroke="#27ae60" stroke-width="2.5"/>
+  <line x1="620" y1="800" x2="620" y2="1040" stroke="#27ae60" stroke-width="2.5"/>
+  <line x1="620" y1="1040" x2="520" y2="1040" stroke="#27ae60" stroke-width="2.5" marker-end="url(#arrowhead-green)"/>
+  <rect x="560" y="785" width="50" height="20" rx="4" fill="#27ae60"/>
+  <text x="585" y="800" text-anchor="middle" fill="white" font-size="11" font-weight="600">PASS</text>
+
+  <!-- FAIL Arrow (left) -->
+  <line x1="380" y1="800" x2="200" y2="800" stroke="#e74c3c" stroke-width="2.5"/>
+  <line x1="200" y1="800" x2="200" y2="895" stroke="#e74c3c" stroke-width="2.5" marker-end="url(#arrowhead-red)"/>
+  <rect x="280" y="785" width="45" height="20" rx="4" fill="#e74c3c"/>
+  <text x="302" y="800" text-anchor="middle" fill="white" font-size="11" font-weight="600">FAIL</text>
+
+  <!-- Agent 5: Revision -->
+  <rect x="100" y="900" width="350" height="70" rx="10" fill="white" stroke="url(#revisionGrad)" stroke-width="2.5" filter="url(#shadow)"/>
+  <circle cx="140" cy="935" r="20" fill="url(#revisionGrad)"/>
+  <text x="140" y="940" text-anchor="middle" fill="white" font-size="16" font-weight="700">5</text>
+  <text x="310" y="928" text-anchor="middle" fill="#333" font-size="15" font-weight="600">Revision Agent - 수정</text>
+  <text x="310" y="950" text-anchor="middle" fill="#888" font-size="11">이슈 분석 → 수정 계획 → 실행 → 변경 추적</text>
+
+  <!-- Loop Arrow: Revision → Review (curved) -->
+  <path d="M 275 900 Q 275 860, 350 830 Q 400 810, 430 762" fill="none" stroke="#e74c3c" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowhead-red)"/>
+  <text x="280" y="855" fill="#e74c3c" font-size="10" font-weight="600">재검수 (최대 3회)</text>
+
+  <!-- 3회 초과 Arrow -->
+  <line x1="450" y1="935" x2="520" y2="935" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="520" y1="935" x2="520" y2="1010" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="530" y="975" fill="#e67e22" font-size="9">3회 초과시</text>
+  <text x="530" y="988" fill="#e67e22" font-size="9">강제 진행</text>
+
+  <!-- Arrow to Final -->
+  <line x1="450" y1="840" x2="450" y2="860" stroke="transparent"/>
+
+  <!-- Agent 6: Final -->
+  <rect x="250" y="1020" width="400" height="70" rx="10" fill="white" stroke="url(#finalGrad)" stroke-width="2.5" filter="url(#shadow)"/>
+  <circle cx="290" cy="1055" r="20" fill="url(#finalGrad)"/>
+  <text x="290" y="1060" text-anchor="middle" fill="white" font-size="16" font-weight="700">6</text>
+  <text x="470" y="1048" text-anchor="middle" fill="#333" font-size="15" font-weight="600">Final Agent - 최종 확정</text>
+  <text x="470" y="1070" text-anchor="middle" fill="#888" font-size="11">일관성 검증 → HTML 조립 → CSS 적용 → WeasyPrint PDF 빌드</text>
+
+  <!-- Arrow: Final → Output -->
+  <line x1="450" y1="1090" x2="450" y2="1125" stroke="#555" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Output PDF -->
+  <rect x="300" y="1130" width="300" height="60" rx="12" fill="url(#outputGrad)" filter="url(#shadow)"/>
+  <text x="450" y="1155" text-anchor="middle" fill="white" font-size="16" font-weight="700">book_final.pdf</text>
+  <text x="450" y="1175" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="12">전문 서적 수준의 완성본</text>
+
+  <!-- Side Panel: State Management -->
+  <rect x="700" y="320" width="170" height="410" rx="8" fill="#f0f4ff" stroke="#c5cee0" stroke-width="1.5"/>
+  <text x="785" y="348" text-anchor="middle" fill="#4a5568" font-size="13" font-weight="700">상태 관리</text>
+  <line x1="715" y1="358" x2="855" y2="358" stroke="#c5cee0" stroke-width="1"/>
+  <text x="785" y="380" text-anchor="middle" fill="#718096" font-size="10">book_state.json</text>
+  <text x="785" y="400" text-anchor="middle" fill="#718096" font-size="10">실시간 업데이트</text>
+  <line x1="715" y1="415" x2="855" y2="415" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="725" y="438" fill="#a0aec0" font-size="10">initialized</text>
+  <text x="725" y="458" fill="#a0aec0" font-size="10">title_ready</text>
+  <text x="725" y="478" fill="#a0aec0" font-size="10">drafting</text>
+  <text x="725" y="498" fill="#a0aec0" font-size="10">draft_complete</text>
+  <text x="725" y="518" fill="#a0aec0" font-size="10">image_complete</text>
+  <text x="725" y="538" fill="#a0aec0" font-size="10">review</text>
+  <text x="725" y="558" fill="#a0aec0" font-size="10">revision</text>
+  <text x="725" y="578" fill="#a0aec0" font-size="10">final_ready</text>
+  <text x="725" y="598" fill="#27ae60" font-size="10" font-weight="600">complete ✓</text>
+  <line x1="715" y1="615" x2="855" y2="615" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="785" y="640" text-anchor="middle" fill="#718096" font-size="10">진행률 자동 계산</text>
+  <text x="785" y="660" text-anchor="middle" fill="#718096" font-size="10">로그: agent_log.jsonl</text>
+  <text x="785" y="680" text-anchor="middle" fill="#718096" font-size="10">실패 시 3회 재시도</text>
+  <text x="785" y="700" text-anchor="middle" fill="#718096" font-size="10">중단 후 재개 가능</text>
+
+  <!-- Dotted line: Orchestrator → State -->
+  <line x1="725" y1="250" x2="700" y2="325" stroke="#a0aec0" stroke-width="1.5" stroke-dasharray="5,3"/>
+
+  <!-- Side Panel: Tools -->
+  <rect x="30" y="1020" width="190" height="170" rx="8" fill="#f0fff4" stroke="#c6f6d5" stroke-width="1.5"/>
+  <text x="125" y="1048" text-anchor="middle" fill="#276749" font-size="13" font-weight="700">Python Tools</text>
+  <line x1="45" y1="1058" x2="205" y2="1058" stroke="#c6f6d5" stroke-width="1"/>
+  <text x="55" y="1080" fill="#48bb78" font-size="10">pdf_builder.py</text>
+  <text x="55" y="1100" fill="#48bb78" font-size="10">state_manager.py</text>
+  <text x="55" y="1120" fill="#48bb78" font-size="10">image_gen.py</text>
+  <text x="55" y="1140" fill="#48bb78" font-size="10">web_researcher.py</text>
+  <text x="55" y="1160" fill="#48bb78" font-size="10">file_manager.py</text>
+  <text x="55" y="1180" fill="#9ae6b4" font-size="9">WeasyPrint | Markdown | Mermaid</text>
+
+  <!-- Bottom: How to Use -->
+  <rect x="50" y="1230" width="800" height="140" rx="10" fill="#1a1a2e" filter="url(#shadow)"/>
+  <text x="450" y="1262" text-anchor="middle" fill="#ffd700" font-size="16" font-weight="700">사용 방법</text>
+  <text x="450" y="1295" text-anchor="middle" fill="#e0e0e0" font-size="13" font-family="monospace">cd book_agent_system &amp;&amp; claude</text>
+  <text x="450" y="1320" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="12">CLAUDE.md가 자동으로 로드 → 주제 입력 → 6단계 자동 실행 → PDF 출력</text>
+  <text x="450" y="1348" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="11">중단해도 state/book_state.json으로 이어서 진행 가능</text>
+
+</svg>

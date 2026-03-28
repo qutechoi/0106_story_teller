@@ -1,0 +1,91 @@
+{
+  "version": "1.0",
+  "pass_threshold": {
+    "total_percent": 70,
+    "min_per_area": 5
+  },
+  "areas": [
+    {
+      "id": "factual_accuracy",
+      "name": "사실 정확성",
+      "weight": 1.0,
+      "max_score": 10,
+      "criteria": [
+        "주요 주장에 근거가 있는가",
+        "통계/수치가 합리적인가",
+        "전문 용어가 올바르게 사용되었는가",
+        "시대에 뒤떨어진 정보가 없는가"
+      ]
+    },
+    {
+      "id": "logical_structure",
+      "name": "논리적 구조",
+      "weight": 1.0,
+      "max_score": 10,
+      "criteria": [
+        "도입-전개-마무리 흐름이 자연스러운가",
+        "섹션 간 전환이 매끄러운가",
+        "논리적 비약이 없는가",
+        "결론이 본문에서 도출되는가"
+      ]
+    },
+    {
+      "id": "style_consistency",
+      "name": "문체 일관성",
+      "weight": 1.0,
+      "max_score": 10,
+      "criteria": [
+        "문체가 통일되어 있는가",
+        "전문 용어 수준이 적합한가",
+        "문장 길이가 적절한가",
+        "능동태/수동태 비율이 적절한가"
+      ]
+    },
+    {
+      "id": "completeness",
+      "name": "완성도",
+      "weight": 1.0,
+      "max_score": 10,
+      "criteria": [
+        "챕터 제목에 맞는 내용을 다루었는가",
+        "목차의 약속이 이행되었는가",
+        "예시/사례가 충분한가",
+        "분량이 적절한가"
+      ]
+    },
+    {
+      "id": "redundancy_gaps",
+      "name": "중복/누락",
+      "weight": 1.0,
+      "max_score": 10,
+      "criteria": [
+        "타 챕터와 중복이 없는가",
+        "핵심 개념 누락이 없는가",
+        "챕터 내 반복이 없는가"
+      ]
+    },
+    {
+      "id": "readability",
+      "name": "가독성",
+      "weight": 1.0,
+      "max_score": 10,
+      "criteria": [
+        "단락 구분이 적절한가",
+        "헤딩 계층이 올바른가",
+        "시각 요소 활용이 적절한가",
+        "이미지 배치가 적절한가"
+      ]
+    },
+    {
+      "id": "reader_value",
+      "name": "독자 가치",
+      "weight": 1.0,
+      "max_score": 10,
+      "criteria": [
+        "독자의 수확이 명확한가",
+        "실무 적용 가능한 인사이트가 있는가",
+        "흥미 유지 요소가 있는가"
+      ]
+    }
+  ]
+}
