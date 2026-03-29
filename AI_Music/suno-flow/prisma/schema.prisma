@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// SQLite doesn't support enums, use String fields instead
+// Genre values: SLEEP_HEALING, LOFI_HIPHOP, CINEMATIC_AMBIENT, MEDITATION_YOGA, NATURE_SOUNDSCAPE, CUSTOM
+// VideoStatus values: DRAFT, RENDERING, RENDERED, UPLOADED, PUBLISHED
+
+// ─── 프롬프트 ──────────────────────────────────────
+model Prompt {
+  id         String   @id @default(cuid())
+  name       String
+  genre      String
+  template   String
+  parameters String   @default("{}")
+  isTemplate Boolean  @default(false)
+  usageCount Int      @default(0)
+  favorite   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  tracks Track[]
+}
+
+// ─── 트랙 ──────────────────────────────────────────
+model Track {
+  id          String  @id @default(cuid())
+  promptId    String?
+  prompt      Prompt? @relation(fields: [promptId], references: [id])
+
+  title       String
+  genre       String
+  durationSec Int
+  bpm         Int?
+  musicalKey  String?
+  filePath    String
+  fileName    String
+  fileSize    Int
+  format      String  @default("mp3")
+
+  // Quality checklist
+  noVocals             Boolean @default(false)
+  cleanStart           Boolean @default(false)
+  cleanEnd             Boolean @default(false)
+  noAwkwardTransitions Boolean @default(false)
+  qualityApproved      Boolean @default(false)
+  qualityNotes         String?
+
+  // Metadata
+  tags String  @default("[]")
+  mood String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  videoTracks VideoTrack[]
+}
+
+// ─── 비디오 ────────────────────────────────────────
+model Video {
+  id              String @id @default(cuid())
+  title           String
+  description     String?
+  status          String @default("DRAFT")
+
+  durationSec     Int?
+  visualizerType  String      @default("spectrum")
+  backgroundColor String      @default("#0a0a0a")
+  backgroundUrl   String?
+  thumbnailUrl    String?
+  outputPath      String?
+
+  // AI disclosure
+  disclosureText String @default("Music generated using Suno AI")
+
+  // YouTube metadata
+  ytTitle       String?
+  ytDescription String?
+  ytTags        String  @default("[]")
+
+  // Render job
+  renderProgress Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tracks VideoTrack[]
+}
+
+model VideoTrack {
+  id       String @id @default(cuid())
+  videoId  String
+  video    Video  @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  trackId  String
+  track    Track  @relation(fields: [trackId], references: [id])
+  order    Int
+  startSec Int    @default(0)
+
+  @@unique([videoId, order])
+}
