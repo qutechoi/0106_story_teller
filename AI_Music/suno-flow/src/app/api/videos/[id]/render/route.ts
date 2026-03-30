@@ -68,6 +68,7 @@ export async function POST(req: NextRequest, { params }: Params) {
     outputPath,
     visualizerType: video.visualizerType as "spectrum" | "waveform" | "circular",
     backgroundColor: video.backgroundColor,
+    backgroundImagePath: video.backgroundUrl || undefined,
     disclosureText: video.disclosureText,
     title: video.title,
     lyrics,

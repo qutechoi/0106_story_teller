@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     description,
     visualizerType = "spectrum",
     backgroundColor = "#0a0a0a",
+    backgroundUrl,
     disclosureText = "Music generated using Suno AI",
     trackIds = [] as string[],
   } = body;
@@ -40,6 +41,7 @@ export async function POST(req: NextRequest) {
       description,
       visualizerType,
       backgroundColor,
+      backgroundUrl: backgroundUrl || null,
       disclosureText,
       tracks: {
         create: trackIds.map((trackId: string, index: number) => ({

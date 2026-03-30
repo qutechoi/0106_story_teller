@@ -26,6 +26,16 @@ const BG_COLORS = [
   { value: "#0a1a0a", label: "Dark Green" },
 ];
 
+// 장르별 배경 설명 (UI 표시용)
+const GENRE_BG_LABELS: Record<string, string> = {
+  SLEEP_HEALING: "Moonlit night sky with soft clouds",
+  LOFI_HIPHOP: "Cozy rainy window, coffee shop ambiance",
+  CINEMATIC_AMBIENT: "Cosmic nebula, epic deep space",
+  MEDITATION_YOGA: "Zen garden at sunrise with mist",
+  NATURE_SOUNDSCAPE: "Lush forest with morning light",
+  CUSTOM: "Abstract dark gradient with patterns",
+};
+
 export function VideoCreator({
   availableTracks,
 }: {
@@ -41,6 +51,16 @@ export function VideoCreator({
     "Music generated using Suno AI"
   );
   const [lyricsText, setLyricsText] = useState("");
+
+  // AI 배경 이미지
+  const [bgMode, setBgMode] = useState<"color" | "ai">("color");
+  const [bgImageUrl, setBgImageUrl] = useState<string | null>(null);
+  const [bgImagePath, setBgImagePath] = useState<string | null>(null);
+  const [bgGenre, setBgGenre] = useState("SLEEP_HEALING");
+  const [bgMood, setBgMood] = useState("");
+  const [bgCustomPrompt, setBgCustomPrompt] = useState("");
+  const [isGeneratingBg, setIsGeneratingBg] = useState(false);
+  const [bgError, setBgError] = useState<string | null>(null);
 
   // 선택된 트랙 (순서 포함)
   const [selectedTracks, setSelectedTracks] = useState<Track[]>([]);
@@ -123,6 +143,37 @@ export function VideoCreator({
     return `${m}:${s.toString().padStart(2, "0")}`;
   }
 
+  // ── AI 배경 이미지 생성 ──────────────────────
+  async function handleGenerateBackground() {
+    setIsGeneratingBg(true);
+    setBgError(null);
+
+    try {
+      const res = await fetch("/api/videos/generate-background", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          genre: bgGenre,
+          mood: bgMood || undefined,
+          customPrompt: bgCustomPrompt || undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to generate background");
+      }
+
+      const data = await res.json();
+      setBgImageUrl(data.previewUrl);
+      setBgImagePath(data.filePath);
+    } catch (err: any) {
+      setBgError(err.message);
+    } finally {
+      setIsGeneratingBg(false);
+    }
+  }
+
   // ── 비디오 생성 & 렌더링 ─────────────────────
   async function handleCreate() {
     if (!title.trim()) {
@@ -146,6 +197,7 @@ export function VideoCreator({
           title: title.trim(),
           visualizerType,
           backgroundColor,
+          backgroundUrl: bgMode === "ai" ? bgImagePath : undefined,
           disclosureText,
           trackIds: selectedTracks.map((t) => t.id),
         }),
@@ -413,32 +465,138 @@ export function VideoCreator({
             </div>
           </div>
 
-          {/* 배경색 */}
+          {/* 배경 모드 선택 */}
           <div>
             <label className="block text-xs text-[var(--muted)] mb-2">
-              Background Color
+              Background
             </label>
-            <div className="grid grid-cols-3 gap-2">
-              {BG_COLORS.map((bg) => (
-                <button
-                  key={bg.value}
-                  onClick={() => setBackgroundColor(bg.value)}
-                  className={`p-2 rounded-lg border text-center transition-colors ${
-                    backgroundColor === bg.value
-                      ? "border-[var(--primary)] ring-1 ring-[var(--primary)]"
-                      : "border-[var(--border)] hover:border-[var(--muted)]"
-                  }`}
-                >
-                  <div
-                    className="w-full h-6 rounded mb-1"
-                    style={{ backgroundColor: bg.value }}
-                  />
-                  <span className="text-[10px] text-[var(--muted)]">
-                    {bg.label}
-                  </span>
-                </button>
-              ))}
+            <div className="flex gap-2 mb-3">
+              <button
+                onClick={() => setBgMode("color")}
+                className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  bgMode === "color"
+                    ? "bg-[var(--primary)] text-white"
+                    : "bg-[var(--background)] text-[var(--muted)] hover:text-[var(--foreground)]"
+                }`}
+              >
+                Solid Color
+              </button>
+              <button
+                onClick={() => setBgMode("ai")}
+                className={`flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  bgMode === "ai"
+                    ? "bg-[var(--primary)] text-white"
+                    : "bg-[var(--background)] text-[var(--muted)] hover:text-[var(--foreground)]"
+                }`}
+              >
+                AI Generate
+              </button>
             </div>
+
+            {bgMode === "color" ? (
+              <div className="grid grid-cols-3 gap-2">
+                {BG_COLORS.map((bg) => (
+                  <button
+                    key={bg.value}
+                    onClick={() => setBackgroundColor(bg.value)}
+                    className={`p-2 rounded-lg border text-center transition-colors ${
+                      backgroundColor === bg.value
+                        ? "border-[var(--primary)] ring-1 ring-[var(--primary)]"
+                        : "border-[var(--border)] hover:border-[var(--muted)]"
+                    }`}
+                  >
+                    <div
+                      className="w-full h-6 rounded mb-1"
+                      style={{ backgroundColor: bg.value }}
+                    />
+                    <span className="text-[10px] text-[var(--muted)]">
+                      {bg.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {/* 장르 선택 */}
+                <div>
+                  <label className="block text-[10px] text-[var(--muted)] mb-1">
+                    Genre Style
+                  </label>
+                  <select
+                    value={bgGenre}
+                    onChange={(e) => setBgGenre(e.target.value)}
+                    className="w-full px-3 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--primary)]"
+                  >
+                    {Object.entries(GENRE_BG_LABELS).map(([key, label]) => (
+                      <option key={key} value={key}>
+                        {GENRE_CONFIG[key as GenreKey]?.icon}{" "}
+                        {GENRE_CONFIG[key as GenreKey]?.label || key}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-[10px] text-[var(--muted)] mt-1">
+                    {GENRE_BG_LABELS[bgGenre]}
+                  </p>
+                </div>
+
+                {/* 무드 입력 */}
+                <div>
+                  <label className="block text-[10px] text-[var(--muted)] mb-1">
+                    Mood (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={bgMood}
+                    onChange={(e) => setBgMood(e.target.value)}
+                    placeholder="e.g. peaceful, dreamy, epic"
+                    className="w-full px-3 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--primary)]"
+                  />
+                </div>
+
+                {/* 커스텀 프롬프트 */}
+                <div>
+                  <label className="block text-[10px] text-[var(--muted)] mb-1">
+                    Custom Prompt (overrides genre/mood)
+                  </label>
+                  <textarea
+                    value={bgCustomPrompt}
+                    onChange={(e) => setBgCustomPrompt(e.target.value)}
+                    placeholder="Describe your ideal background..."
+                    rows={2}
+                    className="w-full px-3 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--primary)] resize-none"
+                  />
+                </div>
+
+                {/* 생성 버튼 */}
+                <button
+                  onClick={handleGenerateBackground}
+                  disabled={isGeneratingBg}
+                  className="w-full py-2 bg-[var(--primary)]/20 hover:bg-[var(--primary)]/30 disabled:opacity-50 text-[var(--primary)] rounded-lg text-sm font-medium transition-colors"
+                >
+                  {isGeneratingBg ? "Generating..." : "Generate Background"}
+                </button>
+
+                {bgError && (
+                  <p className="text-xs text-[var(--danger)]">{bgError}</p>
+                )}
+
+                {/* 생성된 배경 미리보기 */}
+                {bgImageUrl && (
+                  <div className="relative rounded-lg overflow-hidden border border-[var(--border)]">
+                    <img
+                      src={bgImageUrl}
+                      alt="Generated background"
+                      className="w-full aspect-video object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-2 py-1">
+                      <p className="text-[10px] text-white/70">
+                        AI Generated Background
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* AI 공개 문구 */}
@@ -485,21 +643,34 @@ export function VideoCreator({
           <h2 className="text-sm font-semibold mb-3">Preview</h2>
           <div
             className="w-full aspect-video rounded-lg flex flex-col items-center justify-center relative overflow-hidden"
-            style={{ backgroundColor }}
+            style={{
+              backgroundColor:
+                bgMode === "ai" && bgImageUrl ? "#000" : backgroundColor,
+            }}
           >
-            <p className="text-white text-sm font-medium text-center px-4 mb-2">
+            {/* AI 배경 이미지 */}
+            {bgMode === "ai" && bgImageUrl && (
+              <img
+                src={bgImageUrl}
+                alt="Background"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            )}
+
+            {/* 제목 */}
+            <p className="relative text-white text-sm font-medium text-center px-4 mb-2 drop-shadow-lg">
               {title || "Video Title"}
             </p>
-            <div className="absolute bottom-8 w-full px-8">
-              {/* 비주얼라이저 미리보기 */}
-              <div className="flex items-end gap-[2px] justify-center h-12">
-                {Array.from({ length: 40 }).map((_, i) => {
-                  // 고정 패턴 (hydration 안정)
-                  const heights = [68,42,85,30,72,55,90,25,60,78,45,88,35,65,50,82,38,70,58,92,48,75,32,80,62,40,95,28,55,83,46,73,37,87,52,66,43,77,34,90];
+
+            {/* 비주얼라이저 미리보기 — 왼쪽 하단, 1/5 크기 */}
+            <div className="absolute bottom-6 left-3">
+              <div className="flex items-end gap-[1px] h-5 w-16">
+                {Array.from({ length: 16 }).map((_, i) => {
+                  const heights = [68,42,85,30,72,55,90,25,60,78,45,88,35,65,50,82];
                   return (
                     <div
                       key={i}
-                      className="w-1 rounded-sm"
+                      className="w-[3px] rounded-sm"
                       style={{
                         height: `${heights[i]}%`,
                         backgroundColor:
@@ -511,7 +682,9 @@ export function VideoCreator({
                 })}
               </div>
             </div>
-            <p className="absolute bottom-2 text-white/50 text-[10px]">
+
+            {/* AI 공개 문구 */}
+            <p className="absolute bottom-1 text-white/50 text-[8px] left-1/2 -translate-x-1/2">
               {disclosureText}
             </p>
           </div>
