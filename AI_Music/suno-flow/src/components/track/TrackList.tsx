@@ -67,6 +67,18 @@ export function TrackList({ initialTracks }: { initialTracks: Track[] }) {
     return `${m}:${s.toString().padStart(2, "0")}`;
   }
 
+  async function deleteTrack(trackId: string) {
+    if (!confirm("이 트랙을 삭제하시겠습니까?")) return;
+    const res = await fetch(`/api/tracks/${trackId}`, { method: "DELETE" });
+    if (res.ok) {
+      if (audio && playingId === trackId) {
+        audio.pause();
+        setPlayingId(null);
+      }
+      setTracks((prev) => prev.filter((t) => t.id !== trackId));
+    }
+  }
+
   function qualityScore(track: Track) {
     const checks = [
       track.noVocals,
@@ -134,6 +146,13 @@ export function TrackList({ initialTracks }: { initialTracks: Track[] }) {
                 >
                   {score}/4
                 </div>
+                <button
+                  onClick={() => deleteTrack(track.id)}
+                  className="text-[var(--muted)] hover:text-[var(--danger)] transition-colors text-sm"
+                  title="Delete track"
+                >
+                  &#10005;
+                </button>
                 <button
                   onClick={() =>
                     setExpandedId(isExpanded ? null : track.id)

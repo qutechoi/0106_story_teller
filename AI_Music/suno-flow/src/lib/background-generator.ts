@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, HarmCategory, HarmBlockThreshold, SafetyFilterLevel } from "@google/genai";
 import mime from "mime";
 import path from "path";
 import fs from "fs";
@@ -91,38 +91,65 @@ export async function generateBackground(
 
   // Gemini API 호출
   const ai = new GoogleGenAI({ apiKey });
-  const config = {
-    responseModalities: ["IMAGE", "TEXT"],
-  };
 
-  const response = await ai.models.generateContentStream({
-    model: "gemini-2.5-flash-image",
-    config,
-    contents: [
-      {
-        role: "user",
-        parts: [{ text: fullPrompt }],
-      },
-    ],
-  });
-
-  // 응답에서 이미지 추출
   let imageBuffer: Buffer | null = null;
   let mimeType = "image/png";
 
-  for await (const chunk of response) {
-    if (
-      chunk.candidates?.[0]?.content?.parts?.[0]?.inlineData
-    ) {
-      const inlineData = chunk.candidates[0].content.parts[0].inlineData;
-      mimeType = inlineData.mimeType || "image/png";
-      imageBuffer = Buffer.from(inlineData.data || "", "base64");
-      break;
+  try {
+    // Imagen 4.0 모델로 시도 (이미지 전용, 안정적)
+    const imagenResponse = await ai.models.generateImages({
+      model: "imagen-4.0-fast-generate-001",
+      prompt: fullPrompt,
+      config: {
+        numberOfImages: 1,
+        aspectRatio: "16:9",
+        safetyFilterLevel: SafetyFilterLevel.BLOCK_LOW_AND_ABOVE,
+      },
+    });
+
+    if (imagenResponse.generatedImages && imagenResponse.generatedImages.length > 0) {
+      const img = imagenResponse.generatedImages[0];
+      if (img.image?.imageBytes) {
+        imageBuffer = Buffer.from(img.image.imageBytes, "base64");
+        mimeType = "image/png";
+      }
+    }
+  } catch (imagenErr: any) {
+    console.warn("Imagen failed, falling back to Gemini image model:", imagenErr.message);
+
+    // Fallback: gemini-2.5-flash-image로 이미지 생성
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-image",
+      config: {
+        responseModalities: ["IMAGE", "TEXT"],
+        safetySettings: [
+          { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+          { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+          { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+          { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+        ],
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: fullPrompt }],
+        },
+      ],
+    });
+
+    // 응답에서 이미지 추출
+    const parts = response.candidates?.[0]?.content?.parts || [];
+    for (const part of parts) {
+      if (part.inlineData) {
+        mimeType = part.inlineData.mimeType || "image/png";
+        imageBuffer = Buffer.from(part.inlineData.data || "", "base64");
+        break;
+      }
     }
   }
 
   if (!imageBuffer) {
-    throw new Error("Failed to generate background image from Gemini API");
+    throw new Error("Failed to generate background image. Try a different prompt or genre.");
   }
 
   // 파일 저장
